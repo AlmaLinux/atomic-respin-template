@@ -2,7 +2,7 @@ SUDO = sudo
 PODMAN = $(SUDO) podman
 
 IMAGE_NAME ?= localhost/myimage
-CONTAINER_FILE ?= ./Containerfile
+CONTAINER_FILE ?= ./Dockerfile
 IMAGE_CONFIG ?= ./iso.toml
 
 IMAGE_TYPE ?= iso

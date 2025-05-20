@@ -51,7 +51,7 @@ jobs:
     uses: AlmaLinux/desktop-bootc-ci/.github/workflows/build-image.yml@v1
     needs: set-env
     with:
-      containerfile: Containerfile
+      containerfile: Dockerfile
       image-name: "${{ github.event.repository.name }}"
       previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:${{ needs.set-env.outputs.LATEST_TAG }}"
       platforms: "amd64,arm64"
