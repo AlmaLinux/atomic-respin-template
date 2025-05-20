@@ -10,7 +10,7 @@ updates:
       time: "04:00"
     open-pull-requests-limit: 5
 
-  # Maintain dependencies for Go
+  # Maintain dependencies for Docker
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
