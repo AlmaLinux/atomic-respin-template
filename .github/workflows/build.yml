@@ -87,7 +87,7 @@ jobs:
 
     steps:
       - name: Login to Container Registry
-        run: echo ${{ secrets.GITHUB_TOKEN }} | podman login -u ${{ github.actor }} --password-stdin ${{ needs.set-env.outputs.REGISTRY }}
+        run: echo ${{ secrets.GITHUB_TOKEN }} | podman login -u ${{ needs.set-env.outputs.REGISTRY_USER }} --password-stdin ${{ needs.set-env.outputs.REGISTRY }}
 
       - name: Test container
         run: |
