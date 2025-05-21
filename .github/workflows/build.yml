@@ -53,7 +53,7 @@ jobs:
     with:
       containerfile: Dockerfile
       image-name: "${{ github.event.repository.name }}"
-      previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:${{ needs.set-env.outputs.LATEST_TAG }}"
+      previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:latest"
       platforms: "amd64,arm64"
       skip-maximize-build-space: true
       image-path: "${{ github.repository_owner }}"
