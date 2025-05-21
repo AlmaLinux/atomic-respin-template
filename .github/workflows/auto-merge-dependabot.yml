@@ -1,24 +1,24 @@
+name: Dependabot auto-approve
+on: pull_request_target
 
-name: Dependabot auto-approve and auto-merge
-on:
-  schedule:
-    - cron: '50 3 * * *' # At 3:50am UTC everyday
-
-permissions: write-all
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   dependabot:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - name: Approve a PR
-        run: gh pr review --approve "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.4.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Enable auto-merge for Dependabot PRs
-        run: gh pr merge --auto --rebase "$PR_URL"
+        if: ${{ contains(steps.metadata.outputs.package-ecosystem, 'docker') }}
+        run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
