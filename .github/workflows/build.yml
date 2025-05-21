@@ -56,6 +56,9 @@ jobs:
       previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:${{ needs.set-env.outputs.LATEST_TAG }}"
       platforms: "amd64,arm64"
       skip-maximize-build-space: true
+      image-path: "${{ github.repository_owner }}"
+      REGISTRY: "ghcr.io"
+      REGISTRY_USER: "${{ github.actor }}"
     secrets:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
@@ -73,6 +76,9 @@ jobs:
       IMAGE_REF: "${{ needs.build-image.outputs.image-ref }}@${{ needs.build-image.outputs.digest }}"
 
     steps:
+      - name: Login to Container Registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | podman login -u ${{ github.actor }} --password-stdin ghcr.io
+
       - name: Test container
         run: |
           # Create a short script to test the image using heredoc
@@ -99,6 +105,10 @@ jobs:
       update_is_signed: ${{ needs.set-env.outputs.IS_SIGNED == 'true' }}
       config-file: ./iso.toml
       platforms: "amd64,arm64"
+      REGISTRY: "ghcr.io"
+      REGISTRY_USER: "${{ github.actor }}"
+    secrets:
+      REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   promote-image:
     name: Promote image
@@ -111,6 +121,8 @@ jobs:
         ${{ needs.set-env.outputs.LATEST_TAG }}
         ${{ needs.build-image.outputs.redhat-version-id }}
         ${{ needs.build-image.outputs.version }}
+      REGISTRY: "ghcr.io"
+      REGISTRY_USER: "${{ github.actor }}"
     secrets:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
