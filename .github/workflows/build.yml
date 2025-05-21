@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       LATEST_TAG: ${{ steps.set.outputs.LATEST_TAG }}
+      REGISTRY: ${{ steps.set.outputs.REGISTRY }}
+      REGISTRY_USER: ${{ steps.set.outputs.REGISTRY_USER }}
+      IMAGE_PATH: ${{ steps.set.outputs.IMAGE_PATH }}
       IMAGE_NAME: ${{ steps.set.outputs.IMAGE_NAME }}
       IS_SIGNED: ${{ steps.set.outputs.IS_SIGNED }}
     steps:
@@ -33,7 +36,14 @@ jobs:
             echo "LATEST_TAG=latest" >> $GITHUB_OUTPUT
           fi
 
-          echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+          REGISTRY=ghcr.io
+          REGISTRY_USER=${{ github.actor }}
+          IMAGE_PATH=${{ github.repository_owner }}
+
+          echo "REGISTRY=${REGISTRY}" >> $GITHUB_OUTPUT
+          echo "REGISTRY_USER=${REGISTRY_USER}" >> $GITHUB_OUTPUT
+          echo "IMAGE_PATH=${IMAGE_PATH}" >> $GITHUB_OUTPUT
+          echo "IMAGE_NAME=${REGISTRY}/${IMAGE_PATH}/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
 
           # This is a workaround so that the expansion of secrets.SIGNING_SECRET doesn't break the if statement
           SECRET=$(cat <<EOF
@@ -56,9 +66,9 @@ jobs:
       previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:latest"
       platforms: "amd64,arm64"
       skip-maximize-build-space: true
-      image-path: "${{ github.repository_owner }}"
-      REGISTRY: "ghcr.io"
-      REGISTRY_USER: "${{ github.actor }}"
+      image-path: ${{ needs.set-env.outputs.IMAGE_PATH }}
+      REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
+      REGISTRY_USER: ${{ needs.set-env.outputs.REGISTRY_USER }}
     secrets:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
@@ -70,14 +80,14 @@ jobs:
   test-image:
     name: Test image
     runs-on: ubuntu-latest
-    needs: build-image
+    needs: [set-env, build-image]
 
     env:
       IMAGE_REF: "${{ needs.build-image.outputs.image-ref }}@${{ needs.build-image.outputs.digest }}"
 
     steps:
       - name: Login to Container Registry
-        run: echo ${{ secrets.GITHUB_TOKEN }} | podman login -u ${{ github.actor }} --password-stdin ghcr.io
+        run: echo ${{ secrets.GITHUB_TOKEN }} | podman login -u ${{ github.actor }} --password-stdin ${{ needs.set-env.outputs.REGISTRY }}
 
       - name: Test container
         run: |
@@ -105,8 +115,8 @@ jobs:
       update_is_signed: ${{ needs.set-env.outputs.IS_SIGNED == 'true' }}
       config-file: ./iso.toml
       platforms: "amd64,arm64"
-      REGISTRY: "ghcr.io"
-      REGISTRY_USER: "${{ github.actor }}"
+      REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
+      REGISTRY_USER: ${{ needs.set-env.outputs.REGISTRY_USER }}
     secrets:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -121,8 +131,8 @@ jobs:
         ${{ needs.set-env.outputs.LATEST_TAG }}
         ${{ needs.build-image.outputs.redhat-version-id }}
         ${{ needs.build-image.outputs.version }}
-      REGISTRY: "ghcr.io"
-      REGISTRY_USER: "${{ github.actor }}"
+      REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
+      REGISTRY_USER: ${{ needs.set-env.outputs.REGISTRY_USER }}
     secrets:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
