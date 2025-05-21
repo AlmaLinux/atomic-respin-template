@@ -64,6 +64,7 @@ jobs:
       containerfile: Dockerfile
       image-name: "${{ github.event.repository.name }}"
       previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:latest"
+      upstream-public-key: almalinux-desktop-bootc.pub
       platforms: "amd64,arm64"
       skip-maximize-build-space: true
       image-path: ${{ needs.set-env.outputs.IMAGE_PATH }}
