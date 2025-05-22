@@ -3,7 +3,7 @@ FROM scratch AS ctx
 
 COPY files/system /system_files
 COPY files/scripts /build_files
-COPY cosign.pub /cosign.pub
+COPY *.pub /keys
 
 # Base Image
 FROM quay.io/almalinuxorg/almalinux-desktop-bootc:latest@sha256:73f9597797e310ec2920e1f87ad6b53c4e3e4232990f5dbdb4b09587ecaf197d
