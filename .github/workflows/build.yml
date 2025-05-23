@@ -20,6 +20,7 @@ jobs:
       LATEST_TAG: ${{ steps.set.outputs.LATEST_TAG }}
       REGISTRY: ${{ steps.set.outputs.REGISTRY }}
       REGISTRY_USER: ${{ steps.set.outputs.REGISTRY_USER }}
+      PLATFORMS: ${{ steps.set.outputs.PLATFORMS }}
       IMAGE_PATH: ${{ steps.set.outputs.IMAGE_PATH }}
       IMAGE_NAME: ${{ steps.set.outputs.IMAGE_NAME }}
       IS_SIGNED: ${{ steps.set.outputs.IS_SIGNED }}
@@ -39,11 +40,13 @@ jobs:
           REGISTRY=ghcr.io
           REGISTRY_USER=${{ github.actor }}
           IMAGE_PATH=${{ github.repository_owner }}
+          PLATFORMS="amd64,arm64"
 
           echo "REGISTRY=${REGISTRY}" >> $GITHUB_OUTPUT
           echo "REGISTRY_USER=${REGISTRY_USER}" >> $GITHUB_OUTPUT
           echo "IMAGE_PATH=${IMAGE_PATH}" >> $GITHUB_OUTPUT
           echo "IMAGE_NAME=${REGISTRY}/${IMAGE_PATH}/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+          echo "PLATFORMS=${PLATFORMS}" >> $GITHUB_OUTPUT
 
           # This is a workaround so that the expansion of secrets.SIGNING_SECRET doesn't break the if statement
           SECRET=$(cat <<EOF
@@ -65,7 +68,7 @@ jobs:
       image-name: "${{ github.event.repository.name }}"
       previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:latest"
       upstream-public-key: almalinux-desktop-bootc.pub
-      platforms: "amd64,arm64"
+      platforms: ${{ needs.set-env.outputs.PLATFORMS }}
       skip-maximize-build-space: true
       image-path: ${{ needs.set-env.outputs.IMAGE_PATH }}
       REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
@@ -115,7 +118,7 @@ jobs:
       update_origin_ref: "${{ needs.set-env.outputs.IMAGE_NAME }}:${{ needs.set-env.outputs.LATEST_TAG }}"
       update_is_signed: ${{ needs.set-env.outputs.IS_SIGNED == 'true' }}
       config-file: ./iso.toml
-      platforms: "amd64,arm64"
+      platforms: ${{ needs.set-env.outputs.PLATFORMS }}
       REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
       REGISTRY_USER: ${{ needs.set-env.outputs.REGISTRY_USER }}
     secrets:
