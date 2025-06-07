@@ -3,7 +3,7 @@
 This repository is a template repository for generating Atomic AlmaLinux respins.
 
 [Create a new repository](https://github.com/new?template_name=atomic-respin-template&template_owner=AlmaLinux)
-using this template to get started! Once that's done, there you can follow [the instructions](README.md) of your
+using this template to get started! Once that's done, there you can follow [the instructions](/README.md) of your
 newly-created repository to start customizing your image.
 
 # Contributing
@@ -27,13 +27,13 @@ After review and approval, the changes will be merged and deployed.
 
 ## Reporting a Bug
 
-If you find a bug, please report it [here](issues)!
+If you find a bug, please report it [here](https://github.com/AlmaLinux/atomic-respin-template/issues)!
 
 ## Requesting a Feature
 
 We're open to feature requests! Please follow this workflow:
 
-1. [Search existing issues](issues) to see if the feature has already been requested. If so, give it a thumbs up, +1, or a comment on your use-case.
+1. [Search existing issues](https://github.com/AlmaLinux/atomic-respin-template/issues) to see if the feature has already been requested. If so, give it a thumbs up, +1, or a comment on your use-case.
 2. If no similar request exists, open a new issue. Please clearly explain why the feature is needed and provide a detailed use case.
 
 ## Change Approval Process
