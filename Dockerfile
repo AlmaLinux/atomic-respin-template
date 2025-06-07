@@ -10,6 +10,7 @@ FROM quay.io/almalinuxorg/atomic-desktop-gnome:10@sha256:e3b4f9d5575ffef3cbbfc9b
 
 ARG IMAGE_NAME
 ARG IMAGE_REGISTRY
+ARG VARIANT
 
 RUN --mount=type=tmpfs,dst=/opt \
     --mount=type=tmpfs,dst=/tmp \
