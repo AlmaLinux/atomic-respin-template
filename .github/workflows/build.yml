@@ -23,6 +23,7 @@ jobs:
       PLATFORMS: ${{ steps.set.outputs.PLATFORMS }}
       IMAGE_PATH: ${{ steps.set.outputs.IMAGE_PATH }}
       IMAGE_NAME: ${{ steps.set.outputs.IMAGE_NAME }}
+      IMAGE_REF: ${{ steps.set.outputs.IMAGE_REF }}
       IS_SIGNED: ${{ steps.set.outputs.IS_SIGNED }}
     steps:
       - name: Set environment variables
@@ -38,12 +39,14 @@ jobs:
           REGISTRY=ghcr.io
           REGISTRY_USER=${{ github.actor }}
           IMAGE_PATH=${{ github.repository_owner }}
+          IMAGE_NAME=${{ github.event.repository.name }}
           PLATFORMS="amd64"
 
           echo "REGISTRY=${REGISTRY}" >> $GITHUB_OUTPUT
           echo "REGISTRY_USER=${REGISTRY_USER}" >> $GITHUB_OUTPUT
           echo "IMAGE_PATH=${IMAGE_PATH}" >> $GITHUB_OUTPUT
-          echo "IMAGE_NAME=${REGISTRY}/${IMAGE_PATH}/${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+          echo "IMAGE_REF=${REGISTRY}/${IMAGE_PATH}/${IMAGE_NAME}" >> $GITHUB_OUTPUT
           echo "PLATFORMS=${PLATFORMS}" >> $GITHUB_OUTPUT
 
           # This is a workaround so that the expansion of secrets.SIGNING_SECRET doesn't break the if statement
@@ -63,8 +66,8 @@ jobs:
     needs: set-env
     with:
       containerfile: Dockerfile
-      image-name: "${{ github.event.repository.name }}"
-      previous-image: "${{ needs.set-env.outputs.IMAGE_NAME }}:latest"
+      image-name: "${{ needs.set-env.outputs.IMAGE_NAME }}"
+      previous-image: "${{ needs.set-env.outputs.IMAGE_REF }}:latest"
       upstream-public-key: almalinux-desktop-bootc.pub
       platforms: ${{ needs.set-env.outputs.PLATFORMS }}
       skip-maximize-build-space: true
@@ -130,7 +133,7 @@ jobs:
     if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
     uses: AlmaLinux/desktop-bootc-ci/.github/workflows/create-release.yml@v4
     with:
-      image-name: "${{ github.event.repository.name }}"
+      image-name: "${{ needs.set-env.outputs.IMAGE_NAME }}"
       version: ${{ needs.build-image.outputs.version }}
       pretty-version: ${{ needs.build-image.outputs.redhat-version-id }}
       latest-image-ref: "${{ needs.build-image.outputs.image-ref }}:${{ needs.set-env.outputs.LATEST_TAG }}"
