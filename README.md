@@ -25,6 +25,10 @@ which is [maintained](https://github.com/AlmaLinux/atomic-desktop) by the [AlmaL
 If you're not a fan of Gnome, you could also pick our KDE image (`quay.io/almalinuxorg/atomic-desktop-kde:10`).
 
 If you'd like to switch images, change the `FROM` line in the [Dockerfile](Dockerfile).
+If you switch to an entirely new key, note that you will also have to download a new Cosign public
+key for this image and specify it's name in the `upstream-public-key` configuration
+parameter of `/.github/workflows/build.yml`, or remove that parameter altogether to
+disable key verification.
 
 ### Setting up Cosign (Optional)
 
