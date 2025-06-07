@@ -1,12 +1,6 @@
 ---
 name: Build ISO
 on:
-  pull_request:
-  push:
-    branches:
-      - 'main'
-    paths-ignore:
-      - '**/README.md'
   workflow_dispatch:
 
 concurrency:
@@ -38,7 +32,7 @@ jobs:
           REGISTRY=ghcr.io
           REGISTRY_USER=${{ github.actor }}
           IMAGE_PATH=${{ github.repository_owner }}
-          PLATFORMS="amd64,arm64"
+          PLATFORMS="amd64"
 
           echo "REGISTRY=${REGISTRY}" >> $GITHUB_OUTPUT
           echo "REGISTRY_USER=${REGISTRY_USER}" >> $GITHUB_OUTPUT
