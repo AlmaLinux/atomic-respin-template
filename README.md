@@ -8,11 +8,12 @@ Welcome to your brand-new Atomic AlmaLinux Respin!
 
 In the ["Build image"](.github/workflows/build.yml) and ["Build ISOs"](.github/workflows/build-iso.yml) jobs, you'll
 find a `set-env` job where you can configure several things:
-    - `REGISTRY`: the registry to push your image to
-    - `REGISTRY_USER`: your username for this registry
-    - `IMAGE_PATH`: the path to your image
-    - `IMAGE_NAME`: your image's name
-    - `PLATFORMS`: a comma-separated list of platforms for which to build your image, like `"amd64,arm64"`
+
+- `REGISTRY`: the registry to push your image to
+- `REGISTRY_USER`: your username for this registry
+- `IMAGE_PATH`: the path to your image
+- `IMAGE_NAME`: your image's name
+- `PLATFORMS`: a comma-separated list of platforms for which to build your image, like `"amd64,arm64"`
 
 If your registry is not Github (ie. `ghcr.io`) or you need a specific token to authenticate
 to your registry, search those two jobs for the line `REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}`
