@@ -59,7 +59,7 @@ jobs:
 
   build-iso:
     name: Build ISO
-    needs: [set-env, build-image, test-image]
+    needs: [set-env]
     uses: AlmaLinux/desktop-bootc-ci/.github/workflows/build-iso.yml@v3
     with:
       image-name: "${{ github.event.repository.name }}"
