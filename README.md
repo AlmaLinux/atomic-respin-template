@@ -78,7 +78,7 @@ The provided `Makefile` includes several useful commands for local development a
 - `make run-qemu-qcow`: Boot the generated QCOW2 disk image in QEMU for testing.
 - `make run-qemu`: Boot the raw disk image in QEMU (after installation).
 
-> **Note:** You may need `sudo` privileges and Podman installed. For more details, see the `Makefile`.
+> **Note:** You may need `sudo` privileges and Podman installed. For more details, see the `Makefile`. QEMU is only optionally needed for local testing.
 
 ## Continuous Integration (CI)
 
