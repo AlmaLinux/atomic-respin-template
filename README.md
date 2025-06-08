@@ -22,7 +22,7 @@ By default, this template uses the base image `quay.io/almalinuxorg/atomic-deskt
 
 To switch images, change the `FROM` line in the [Dockerfile](Dockerfile). If your image use a different signing key, download the new Cosign public key and specify its name in the `upstream-public-key` parameter in `.github/workflows/build.yml`, or remove the parameter to disable key verification.
 
-### Setting up Cosign (Optional, highly recommended)
+### Set up container signing (Optional, highly recommended)
 
 Container signing is important for end-user security and is fully supported by
 the CI. By default, the CI will check the signature of your base image to make
@@ -91,23 +91,28 @@ Build or download the ISO for your image, boot into it and follow the installati
 ### Switching from another image
 
 > [!CAUTION]
-> This is entirely unsupported and may not work at all.
+> This is entirely unsupported and may not work at all. In fact, it probably doesn't
+> work at all and it's a terrible idea to even try. Don't do this.
 
-If you're already running a bootc image and wish to change to this one, you may be able to do this via `bootc switch`. As you won't have the correct signing key or configuration, you'll have to run it twice:
+If you're already running a bootc image and wish to change to this one, you may be able to do this via `bootc switch`. As you won't have the correct signing key or configuration, you'll have to disable it first:
 
 ```sh
+sudo cp /etc/containers/policy.json /etc/containers/policy.json.old
+sudo echo '{"default": [{"type": "insecureAcceptAnything"}]}' > /etc/containers/policy.json
 sudo bootc switch --transport registry <REGISTRY>/<IMAGE_PATH>/<IMAGE_NAME>:latest
 ```
 
 (fill in `<REGISTRY>/<IMAGE_PATH>/<IMAGE_NAME>` with your actual bootc image location)
 
-After this, reboot into your new image. Now we can fix it to enforce key verification:
+After this, reboot into your new image. Now we can fix it to enforce key verification
+with the new image's `policy.json`:
 
 ```sh
-sudo bootc switch --mutate-in-place --transport registry --enforce-container-sigpolicy <REGISTRY>/<IMAGE_PATH>/<IMAGE_NAME>:latest
+sudo cp /usr//etc/containers/policy.json /etc/containers/policy.json
 ```
 
-Now your image should be able to update itself correctly.
+Now your image should be able to update itself correctly. Or not at all. Remember,
+this is entirely unsupported!!
 
 ### Upgrading your system
 
