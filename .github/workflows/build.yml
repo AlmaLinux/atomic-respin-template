@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   set-env:
+    if: github.repository != 'AlmaLinux/atomic-respin-template'
     runs-on: ubuntu-latest
     outputs:
       LATEST_TAG: ${{ steps.set.outputs.LATEST_TAG }}
