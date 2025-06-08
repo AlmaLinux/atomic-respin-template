@@ -1,6 +1,9 @@
 ---
 name: Initial Setup
-on: push
+on:
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -15,6 +18,7 @@ jobs:
 
       - name: Run initial setup script
         run: |
+          sed -i "/if: github.repository != 'AlmaLinux\/atomic-respin-template'/d" .github/workflows/*.yml
           rm -rf \
             .github/README.md \
             .github/workflows/initial_setup.yml
