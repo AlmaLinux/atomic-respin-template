@@ -22,7 +22,12 @@ By default, this template uses the base image `quay.io/almalinuxorg/atomic-deskt
 
 To switch images, change the `FROM` line in the [Dockerfile](Dockerfile). If your image use a different signing key, download the new Cosign public key and specify its name in the `upstream-public-key` parameter in `.github/workflows/build.yml`, or remove the parameter to disable key verification.
 
-### Setting up Cosign (Optional)
+### Setting up Cosign (Optional, highly recommended)
+
+Container signing is important for end-user security and is fully supported by
+the CI. By default, the CI will check the signature of your base image to make
+sure it hasn't been tampered with. You can also sign your own image to give
+your users the same security guarantees.
 
 If you'd like to sign your images using Cosign:
 
@@ -31,8 +36,11 @@ If you'd like to sign your images using Cosign:
    podman run --rm -it -v /tmp:/cosign-keys bitnami/cosign generate-key-pair
    ```
    Leave the password blank. The keys will be in `/tmp/cosign.{key,pub}`.
-2. Add `cosign.pub` to the repository as `/cosign.pub`, commit, and push. This file is public and needed for signature verification.
-3. In GitHub repo settings, go to "Secrets and variables" > "Actions". Create a secret called `SIGNING_SECRET` and paste the contents of `cosign.key`. Store `cosign.key` securely and delete it from `/tmp`.
+2. Add `cosign.pub` to the repository as `/cosign.pub`, commit, and push. This file is public and needed for signature verification. **NEVER** commit your `cosign.key` to the repo!!
+3. In GitHub repo settings, go to "Secrets and variables" > "Actions". Create a secret called `SIGNING_SECRET` and paste the contents of `cosign.key`. Store `cosign.key` securely and delete it from `/tmp`. You can also do this via the GitHub CLI:
+   ```bash
+   gh secret set SIGNING_SECRET < cosign.key
+   ```
 
 ## Customizing your respin
 
