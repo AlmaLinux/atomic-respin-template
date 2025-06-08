@@ -80,6 +80,56 @@ The provided `Makefile` includes several useful commands for local development a
 
 > **Note:** You may need `sudo` privileges and Podman installed. For more details, see the `Makefile`. QEMU is only optionally needed for local testing.
 
+## Using your image with bootc
+
+Your respin is designed to work with [bootc](https://github.com/containers/bootc), a tool for managing and updating container-based operating system images. Here are some basics to get you started:
+
+### Installing your image
+
+Build or download the ISO for your image, boot into it and follow the installation procedure.
+
+### Switching from another image
+
+> [!CAUTION]
+> This is entirely unsupported and may not work at all.
+
+If you're already running a bootc image and wish to change to this one, you may be able to do this via `bootc switch`. As you won't have the correct signing key or configuration, you'll have to run it twice:
+
+```sh
+sudo bootc switch --transport registry <REGISTRY>/<IMAGE_PATH>/<IMAGE_NAME>:latest
+```
+
+(fill in `<REGISTRY>/<IMAGE_PATH>/<IMAGE_NAME>` with your actual bootc image location)
+
+After this, reboot into your new image. Now we can fix it to enforce key verification:
+
+```sh
+sudo bootc switch --mutate-in-place --transport registry --enforce-container-sigpolicy <REGISTRY>/<IMAGE_PATH>/<IMAGE_NAME>:latest
+```
+
+Now your image should be able to update itself correctly.
+
+### Upgrading your system
+
+Once installed, your system will automatically check for updates in the background using a systemd unit provided by bootc. You can also manually trigger an upgrade:
+
+```sh
+sudo bootc upgrade
+```
+
+This will pull the latest image and prepare it for the next boot. On reboot, the system will run the new image version.
+
+### Checking status and troubleshooting
+
+- To see the current image and status:
+  ```sh
+  bootc status
+  ```
+- To roll back to the previous image after an upgrade:
+  ```sh
+  sudo bootc rollback
+  ```
+
 ## Continuous Integration (CI)
 
 This template is set up with GitHub Actions workflows to build, test, and (optionally) sign your images automatically on every push or pull request. See the `.github/workflows/` directory for details.
@@ -94,6 +144,6 @@ This template is set up with GitHub Actions workflows to build, test, and (optio
 
 - [AlmaLinux Atomic SIG](https://wiki.almalinux.org/sigs/Atomic.html)
 - [AlmaLinux Atomic Desktop Images](https://github.com/AlmaLinux/atomic-desktop)
-- [bootc-image-builder](https://github.com/osbuild/bootc-image-builder)
+- [bootc documentation](https://github.com/containers/bootc)
 - [Podman documentation](https://podman.io/)
 - [QEMU documentation](https://www.qemu.org/)
