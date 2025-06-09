@@ -6,7 +6,8 @@ Welcome to your brand-new Atomic AlmaLinux Respin!
 
 ### Set basic configuration
 
-In the ["Build image"](.github/workflows/build.yml) and ["Build ISOs"](.github/workflows/build-iso.yml) workflows, you'll find a `set-env` job where you can configure several key variables:
+In the ["Build image"](.github/workflows/build.yml) and ["Build ISOs"](.github/workflows/build-iso.yml)
+workflows, you'll find a `set-env` job where you can configure several key variables:
 
 - `REGISTRY`: The container registry to push your image to (default: GitHub Container Registry `ghcr.io`).
 - `REGISTRY_USER`: Your username for the registry.
@@ -14,13 +15,18 @@ In the ["Build image"](.github/workflows/build.yml) and ["Build ISOs"](.github/w
 - `IMAGE_NAME`: The name of your image.
 - `PLATFORMS`: A quoted, comma-separated list of platforms to build for (e.g., `"amd64,arm64"`).
 
-If your registry is not GitHub or you need a specific token, search for `REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}` in the workflow files and replace it with the appropriate secret.
+If your registry is not GitHub or you need a specific token, search for `REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}`
+in the workflow files and replace it with the appropriate secret.
 
 ### Pick a base desktop image
 
-By default, this template uses the base image `quay.io/almalinuxorg/atomic-desktop-gnome:10`, maintained by the [AlmaLinux Atomic SIG](https://wiki.almalinux.org/sigs/Atomic.html). If you prefer KDE, you can use `quay.io/almalinuxorg/atomic-desktop-kde:10` instead.
+By default, this template uses the base image `quay.io/almalinuxorg/atomic-desktop-gnome:10`, maintained by the
+[AlmaLinux Atomic SIG](https://wiki.almalinux.org/sigs/Atomic.html). If you prefer KDE, you can use
+`quay.io/almalinuxorg/atomic-desktop-kde:10` instead.
 
-To switch images, change the `FROM` line in the [Dockerfile](Dockerfile). If your image use a different signing key, download the new Cosign public key and specify its name in the `upstream-public-key` parameter in `.github/workflows/build.yml`, or remove the parameter to disable key verification.
+To switch images, change the `FROM` line in the [Dockerfile](Dockerfile). If your image use a different
+signing key, download the new Cosign public key and specify its name in the `upstream-public-key`
+parameter in `.github/workflows/build.yml`, or remove the parameter to disable key verification.
 
 ### Set up container signing (Optional, highly recommended)
 
@@ -36,8 +42,11 @@ If you'd like to sign your images using Cosign:
    podman run --rm -it -v /tmp:/cosign-keys bitnami/cosign generate-key-pair
    ```
    Leave the password blank. The keys will be in `/tmp/cosign.{key,pub}`.
-2. Add `cosign.pub` to the repository as `/cosign.pub`, commit, and push. This file is public and needed for signature verification. **NEVER** commit your `cosign.key` to the repo!!
-3. In GitHub repo settings, go to "Secrets and variables" > "Actions". Create a secret called `SIGNING_SECRET` and paste the contents of `cosign.key`. Store `cosign.key` securely and delete it from `/tmp`. You can also do this via the GitHub CLI:
+2. Add `cosign.pub` to the repository as `/cosign.pub`, commit, and push. This file is public and
+   needed for signature verification. **NEVER** commit your `cosign.key` to the repo!!
+3. In GitHub repo settings, go to "Secrets and variables" > "Actions". Create a secret called
+   `SIGNING_SECRET` and paste the contents of `cosign.key`. Store `cosign.key` securely and delete
+   it from `/tmp`. You can also do this via the GitHub CLI:
    ```bash
    gh secret set SIGNING_SECRET < cosign.key
    ```
@@ -48,11 +57,15 @@ Now you're ready to make your respin your own!
 
 ### Adding files
 
-Place any files you want to include in your image in [`/files/system/`](files/system/). The directory structure and permissions will be preserved. This is ideal for adding themes, backgrounds, configuration files, etc.
+Place any files you want to include in your image in [`/files/system/`](files/system/). The
+directory structure and permissions will be preserved. This is ideal for adding themes,
+backgrounds, configuration files, etc.
 
 ### Executing commands
 
-Scripts in [`/files/scripts/`](files/scripts/) are run during image creation. The `build.sh` script copies files from `/files/system/` into the image, then runs all scripts in order, and finally runs `cleanup.sh`.
+Scripts in [`/files/scripts/`](files/scripts/) are run during image creation. The `build.sh`
+script copies files from `/files/system/` into the image, then runs all scripts in order,
+and finally runs `cleanup.sh`.
 
 - Start by editing [`10-base.sh`](files/scripts/10-base.sh) to suit your needs.
 - Add more scripts as needed, using the naming scheme `XX-whatever.sh` (where `XX` is a number).
@@ -60,7 +73,8 @@ Scripts in [`/files/scripts/`](files/scripts/) are run during image creation. Th
 
 ### Build your new image
 
-After adding your files and scripts, commit your changes. The CI will build a new image for you automatically. You can also build locally:
+After adding your files and scripts, commit your changes. The CI will build a new image
+for you automatically. You can also build locally:
 
 ```sh
 make image
@@ -78,11 +92,13 @@ The provided `Makefile` includes several useful commands for local development a
 - `make run-qemu-qcow`: Boot the generated QCOW2 disk image in QEMU for testing.
 - `make run-qemu`: Boot the raw disk image in QEMU (after installation).
 
-> **Note:** You may need `sudo` privileges and Podman installed. For more details, see the `Makefile`. QEMU is only optionally needed for local testing.
+> **Note:** You may need `sudo` privileges and Podman installed. For more details, see
+>  the `Makefile`. QEMU is only optionally needed for local testing.
 
 ## Using your image with bootc
 
-Your respin is designed to work with [bootc](https://github.com/containers/bootc), a tool for managing and updating container-based operating system images. Here are some basics to get you started:
+Your respin is designed to work with [bootc](https://github.com/containers/bootc), a tool for
+managing and updating container-based operating system images. Here are some basics to get you started:
 
 ### Installing your image
 
@@ -94,7 +110,9 @@ Build or download the ISO for your image, boot into it and follow the installati
 > This is entirely unsupported and may not work at all. In fact, it probably doesn't
 > work at all and it's a terrible idea to even try. Don't do this.
 
-If you're already running a bootc image and wish to change to this one, you may be able to do this via `bootc switch`. As you won't have the correct signing key or configuration, you'll have to disable it first:
+If you're already running a bootc image and wish to change to this one, you may be able to do
+this via `bootc switch`. As you won't have the correct signing key or configuration, you'll
+have to disable it first:
 
 ```sh
 sudo cp /etc/containers/policy.json /etc/containers/policy.json.old
@@ -116,13 +134,15 @@ this is entirely unsupported!!
 
 ### Upgrading your system
 
-Once installed, your system will automatically check for updates in the background using a systemd unit provided by bootc. You can also manually trigger an upgrade:
+Once installed, your system will automatically check for updates in the background using a
+systemd unit provided by bootc. You can also manually trigger an upgrade:
 
 ```sh
 sudo bootc upgrade
 ```
 
-This will pull the latest image and prepare it for the next boot. On reboot, the system will run the new image version.
+This will pull the latest image and prepare it for the next boot. On reboot, the system
+will run the new image version.
 
 ### Checking status and troubleshooting
 
@@ -137,13 +157,15 @@ This will pull the latest image and prepare it for the next boot. On reboot, the
 
 ## Continuous Integration (CI)
 
-This template is set up with GitHub Actions workflows to build, test, and (optionally) sign your images automatically on every push or pull request. See the `.github/workflows/` directory for details.
+This template is set up with GitHub Actions workflows to build, test, and (optionally)
+sign your images automatically on every push or pull request. See the `.github/workflows/`
+directory for details.
 
 ## Troubleshooting
 
 - **Build fails locally:** Ensure you have Podman and QEMU installed, and that you have the necessary permissions (try running with `sudo`).
 - **CI build fails:** Check the Actions tab in GitHub for logs. Make sure your secrets and configuration are correct.
-- **Image doesn't boot in QEMU:** Double-check your custom scripts and added files for errors.
+- **Image doesn't boot in QEMU:** Double-check your custom scripts and added files for errors, check the build logs for errors.
 
 ## Resources
 
