@@ -51,6 +51,29 @@ If you'd like to sign your images using Cosign:
    gh secret set SIGNING_SECRET < cosign.key
    ```
 
+### Set up Cloudflare R2 for ISO storage
+
+By default, the CI will upload built ISO images as Github Artifacts. These ISOs
+can get quite big and Artifact storage is limited, so you may want to upload the
+ISOs somewhere else, like the free tier of Cloudflare R2.
+
+Follow these instructions to set that up:
+
+1. Sign up to the free tier of [Cloudflare R2](https://www.cloudflare.com/developer-platform/products/r2/)
+2. Create a new bucket, with whatever name you want. Set the location to whatever you want. The free tier
+   only gives you access to the Standard storage class, so leave that selected.
+3. Now that you have a bucket, you need credentials to access it. Click on the API selection button, and
+   then on "Manage API tokens". In the next screen, click the "Create Account API token" button. Select
+   "Object Read & Write" permissions, and apply it only to the specific bucket you just created, and then
+   click on the "Create Account API Token" button. Note down the credentials displayed in the next screen.
+4. In Github, add the following new repository secrets:
+   - `R2_ACCOUNT_ID`: your cloudflare account ID (you can find it in the URL of the Cloudflare dashboard: `https://dash.cloudflare.com/<R2_ACCOUNT_ID>/home`)
+   - `R2_ACCESS_KEY_ID`: Access Key ID for your API token
+   - `R2_SECRET_ACCESS_KEY`: Secret Access Key for your API token
+   - `R2_BUCKET`: your bucket name
+5. In the `build-iso` job of [`build-iso.yml`](/.github/workflows/build-iso.yml), uncomment the secret
+   definitions for the secrets you just defined and change `upload-to-cloudflare` to `true`.
+
 ## Customizing your respin
 
 Now you're ready to make your respin your own!
