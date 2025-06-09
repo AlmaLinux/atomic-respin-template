@@ -59,15 +59,20 @@ jobs:
   build-iso:
     name: Build ISO
     needs: [set-env]
-    uses: AlmaLinux/desktop-bootc-ci/.github/workflows/build-iso.yml@v4
+    uses: AlmaLinux/atomic-ci/.github/workflows/build-iso.yml@v4
     with:
       image-name: "${{ needs.set-env.outputs.IMAGE_NAME }}"
-      image: ${{ needs.build-image.outputs.image-ref }}@${{ needs.build-image.outputs.digest }}
+      image: "${{ needs.set-env.outputs.IMAGE_REF }}:${{ needs.set-env.outputs.LATEST_TAG }}"
       update_origin_ref: "${{ needs.set-env.outputs.IMAGE_REF }}:${{ needs.set-env.outputs.LATEST_TAG }}"
       update_is_signed: ${{ needs.set-env.outputs.IS_SIGNED == 'true' }}
       config-file: ./iso.toml
       platforms: ${{ needs.set-env.outputs.PLATFORMS }}
       REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
       REGISTRY_USER: ${{ needs.set-env.outputs.REGISTRY_USER }}
+      upload-to-cloudflare: false
     secrets:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      # R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      # R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      # R2_BUCKET: ${{ secrets.R2_BUCKET }}
