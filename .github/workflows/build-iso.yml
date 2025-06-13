@@ -59,7 +59,7 @@ jobs:
   build-iso:
     name: Build ISO
     needs: [set-env]
-    uses: AlmaLinux/atomic-ci/.github/workflows/build-iso.yml@v5
+    uses: AlmaLinux/atomic-ci/.github/workflows/build-iso.yml@v6
     with:
       image-name: "${{ needs.set-env.outputs.IMAGE_NAME }}"
       image: "${{ needs.set-env.outputs.IMAGE_REF }}:${{ needs.set-env.outputs.LATEST_TAG }}"
@@ -70,9 +70,9 @@ jobs:
       REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
       REGISTRY_USER: ${{ needs.set-env.outputs.REGISTRY_USER }}
       upload-to-cloudflare: false
+      # bucket: ${{ secrets.R2_BUCKET }}
     secrets:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-      # R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-      # R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-      # R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      # ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      # SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
