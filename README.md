@@ -6,8 +6,7 @@ Welcome to your brand-new Atomic AlmaLinux Respin!
 
 ### Set basic configuration
 
-In the ["Build image"](.github/workflows/build.yml) and ["Build ISOs"](.github/workflows/build-iso.yml)
-workflows, you'll find a `set-env` job where you can configure several key variables:
+In the ["config"](.github/actions/config/action.yml) action, you'll find a job where you can configure several key variables:
 
 - `REGISTRY`: The container registry to push your image to (default: GitHub Container Registry `ghcr.io`).
 - `REGISTRY_USER`: Your username for the registry.
