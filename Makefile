@@ -75,6 +75,7 @@ run-qemu-qcow:
 		-snapshot $(QEMU_DISK_QCOW2)
 
 run-qemu-iso:
+	mkdir -p ./output
 	# Make a disk to install to
 	[[ ! -e $(QEMU_DISK_RAW) ]] && dd if=/dev/null of=$(QEMU_DISK_RAW) bs=1M seek=20480
 
