@@ -28,6 +28,8 @@ jobs:
       - name: Set environment variables
         uses: ./.github/actions/config
         id: set
+        with:
+          SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
 
   build-iso:
     name: Build ISO
