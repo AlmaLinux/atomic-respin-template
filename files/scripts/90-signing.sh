@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# DO NOT MODIFY THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING
+
 set -xeuo pipefail
 
 CONTEXT_PATH="$(realpath "$(dirname "$0")/..")" # should return /ctx

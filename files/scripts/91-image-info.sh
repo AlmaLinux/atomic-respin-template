@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# DO NOT MODIFY THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING
+
 set -xeuo pipefail
 
 # This may help us get some usage stats through countme data.
