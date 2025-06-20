@@ -95,6 +95,7 @@ jobs:
       image: ${{ needs.build-image.outputs.image-ref }}@${{ needs.build-image.outputs.digest }}
       tag: |
         ${{ needs.set-env.outputs.LATEST_TAG }}
+        ${{ needs.build-image.outputs.major-version }}
         ${{ needs.build-image.outputs.redhat-version-id }}
         ${{ needs.build-image.outputs.version }}
       REGISTRY: ${{ needs.set-env.outputs.REGISTRY }}
