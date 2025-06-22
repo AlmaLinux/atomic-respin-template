@@ -42,6 +42,7 @@ jobs:
     uses: AlmaLinux/atomic-ci/.github/workflows/build-image.yml@v6
     needs: set-env
     with:
+      image-description: "My AlmaLinux Atomic Respin"
       containerfile: Dockerfile
       image-name: "${{ needs.set-env.outputs.IMAGE_NAME }}"
       previous-image: "${{ needs.set-env.outputs.IMAGE_REF }}:latest"
