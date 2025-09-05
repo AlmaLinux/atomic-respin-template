@@ -60,9 +60,9 @@ Follow these steps:
 2. **Create an API token** with "Object Read & Write" permissions, limited to your new bucket. Save the Access Key ID and Secret Access Key.
 3. **Add the following repository secrets in GitHub:**
    - `R2_ACCOUNT_ID`: Your Cloudflare account ID (found in the dashboard URL: `https://dash.cloudflare.com/<R2_ACCOUNT_ID>/home`)
-   - `ACCESS_KEY_ID`: The Access Key ID from your API token
-   - `SECRET_ACCESS_KEY`: The Secret Access Key from your API token
-   - `BUCKET`: Your bucket name
+   - `R2_ACCESS_KEY_ID`: The Access Key ID from your API token
+   - `R2_SECRET_ACCESS_KEY`: The Secret Access Key from your API token
+   - `R2_BUCKET`: Your bucket name
 4. **Update your workflow:**
    In the `build-iso` job of [`build-iso.yml`](/.github/workflows/build-iso.yml), uncomment the secret definitions for these secrets and set `upload-to-cloudflare: true` in the workflow inputs:
    ```yaml
