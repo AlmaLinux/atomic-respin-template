@@ -3,7 +3,7 @@
 FROM scratch AS ctx
 
 COPY files/system /system_files/
-COPY files/scripts /build_files/
+COPY --chmod=0755 files/scripts /build_files/
 COPY *.pub /keys/
 
 # Base Image
