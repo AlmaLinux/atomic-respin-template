@@ -39,7 +39,7 @@ jobs:
 
   build-image:
     name: Build image
-    uses: AlmaLinux/atomic-ci/.github/workflows/build-image.yml@v10
+    uses: AlmaLinux/atomic-ci/.github/workflows/build-image.yml@v11
     needs: set-env
     with:
       image-description: "My AlmaLinux Atomic Respin"
