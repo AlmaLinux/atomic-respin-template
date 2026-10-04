@@ -51,3 +51,7 @@ jobs:
       # R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
       # ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       # SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+    permissions:
+      contents: read
+      packages: read
+      id-token: write
