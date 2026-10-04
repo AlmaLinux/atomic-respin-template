@@ -12,6 +12,28 @@ updates:
       interval: "daily"
       time: "07:00"
     open-pull-requests-limit: 5
+    groups:
+      gha-actions-checkout:
+        patterns:
+          - "actions/checkout"
+      gha-actions-download-artifact:
+        patterns:
+          - "actions/download-artifact"
+      gha-actions-upload-artifact:
+        patterns:
+          - "actions/upload-artifact"
+      gha-redhat-actions-podman-login:
+        patterns:
+          - "redhat-actions/podman-login"
+      gha-sigstore-cosign-installer:
+        patterns:
+          - "sigstore/cosign-installer"
+      gha-aws-actions-configure-aws-credentials:
+        patterns:
+          - "aws-actions/configure-aws-credentials"
+      gha-ublue-os-remove-unwanted-software:
+        patterns:
+          - "ublue-os/remove-unwanted-software"
 
   # Maintain dependencies for Docker
   - package-ecosystem: "docker"
