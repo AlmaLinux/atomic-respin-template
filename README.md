@@ -106,8 +106,8 @@ The provided `Makefile` includes several useful commands for local development a
 
 - `make image`: Build the container image using Podman.
 - `make clean`: Remove the `./output` directory and build artifacts.
-- `make iso`: Build a bootable ISO image using [bootc-image-builder](https://github.com/osbuild/bootc-image-builder).
-- `make qcow2`: Build a QCOW2 disk image using bootc-image-builder.
+- `make iso`: Build a live ISO with an installer for your image, using [image-builder](https://github.com/osbuild/image-builder).
+- `make qcow2`: Build a QCOW2 disk image using image-builder.
 - `make run-qemu-iso`: Boot the generated ISO in QEMU for testing. Creates a virtual disk if needed.
 - `make run-qemu-qcow`: Boot the generated QCOW2 disk image in QEMU for testing.
 - `make run-qemu`: Boot the raw disk image in QEMU (after installation).
@@ -122,7 +122,9 @@ managing and updating container-based operating system images. Here are some bas
 
 ### Installing your image
 
-Build or download the ISO for your image, boot into it and follow the installation procedure.
+Build or download the ISO for your image and boot into it. It starts a live session of your image, where you can
+try it out before installing it with the installer. The image is included in the ISO, so the installation doesn't
+need a network connection.
 
 ### Switching from another image
 
