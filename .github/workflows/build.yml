@@ -17,7 +17,7 @@ concurrency:
 jobs:
   set-env:
     if: github.repository != 'AlmaLinux/atomic-respin-template'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       LATEST_TAG: ${{ steps.set.outputs.LATEST_TAG }}
       REGISTRY: ${{ steps.set.outputs.REGISTRY }}
@@ -62,7 +62,7 @@ jobs:
 
   test-image:
     name: Test image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: [set-env, build-image]
 
     env:
