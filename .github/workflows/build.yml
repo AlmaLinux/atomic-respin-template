@@ -36,7 +36,7 @@ jobs:
 
   build-image:
     name: Build image
-    uses: AlmaLinux/atomic-ci/.github/workflows/build-image.yml@v11
+    uses: AlmaLinux/atomic-ci/.github/workflows/build-image.yml@v12.1
     needs: set-env
     with:
       image-description: "My AlmaLinux Atomic Respin"
@@ -88,7 +88,7 @@ jobs:
     name: Promote image
     needs: [set-env, build-image, test-image]
     if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
-    uses: AlmaLinux/atomic-ci/.github/workflows/retag-image.yml@v11
+    uses: AlmaLinux/atomic-ci/.github/workflows/retag-image.yml@v12.1
     with:
       image: ${{ needs.build-image.outputs.image-ref }}
       digest: ${{ needs.build-image.outputs.digest }}
@@ -108,7 +108,7 @@ jobs:
     name: Create Release
     needs: [set-env, build-image, test-image, promote-image]
     if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
-    uses: AlmaLinux/atomic-ci/.github/workflows/create-release.yml@v11
+    uses: AlmaLinux/atomic-ci/.github/workflows/create-release.yml@v12.1
     with:
       image-name: "${{ needs.set-env.outputs.IMAGE_NAME }}"
       version: ${{ needs.build-image.outputs.version }}
