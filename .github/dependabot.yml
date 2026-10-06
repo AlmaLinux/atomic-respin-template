@@ -13,6 +13,9 @@ updates:
       time: "07:00"
     open-pull-requests-limit: 5
     groups:
+      gha-almalinux-atomic-ci:
+        patterns:
+          - "AlmaLinux/atomic-ci*"
       gha-actions-checkout:
         patterns:
           - "actions/checkout"
@@ -22,6 +25,12 @@ updates:
       gha-actions-upload-artifact:
         patterns:
           - "actions/upload-artifact"
+      gha-dependabot-fetch-metadata:
+        patterns:
+          - "dependabot/fetch-metadata"
+      gha-softprops-action-gh-release:
+        patterns:
+          - "softprops/action-gh-release"
       gha-redhat-actions-podman-login:
         patterns:
           - "redhat-actions/podman-login"
